@@ -34,6 +34,7 @@
 			$this->col[] = ["label"=>"Titulo","name"=>"title"];
 			$this->col[] = ["label"=>"Categoria","name"=>"category_id","join"=>"br_category,name"];
 			$this->col[] = ["label"=>"Palavras-chave","name"=>"tags"];
+            $this->col[] = ["label"=>"Autor","name"=>"cms_users_id","join"=>"cms_users,name"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -237,6 +238,9 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
+            if(!CRUDBooster::isSuperadmin()){
+                $query->where('cms_users_id', CRUDBooster::myId());
+            }
 
 	    }
 
@@ -260,6 +264,7 @@
 	    public function hook_before_add(&$postdata) {
 	        //Your code here
             $postdata['slug'] = str_slug($postdata['title']);
+            $postdata['cms_users_id'] = CRUDBooster::myId();
 
 	    }
 
@@ -286,6 +291,7 @@
 	    public function hook_before_edit(&$postdata,$id) {
 	        //Your code here
             $postdata['slug'] = str_slug($postdata['title']);
+            $postdata['cms_users_id'] = CRUDBooster::myId();
 
 
         }
